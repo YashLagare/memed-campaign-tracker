@@ -1,7 +1,9 @@
+import mongoose from 'mongoose';
 import { Submission, ISubmission } from '../models/Submission';
 import { Campaign } from '../models/Campaign';
 import { CreateSubmissionInput } from '../validators/submission.validator';
 import { paiseToRupees } from '../utils/currency';
+import { calculateIncrementalPayout, IncrementalPayoutResult } from './payout.engine';
 
 export interface FormattedSubmission {
   id: string;
@@ -137,5 +139,98 @@ export async function getCreatorEarnings(creatorId: string): Promise<{
     totalSubmissions: submissions.length,
     totalViews,
     totalEarningsRupees: paiseToRupees(totalEarningsPaise),
+  };
+}
+
+export interface ViewUpdateResponse {
+  message: string;
+  submissionId: string;
+  views: number;
+  previousViews: number;
+  earnedMilestonePayoutRupees: number;
+  additionalPayoutCreditedRupees: number;
+  totalCreditedPayoutRupees: number;
+  campaignBudgetSpentRupees: number;
+  campaignRemainingBudgetRupees: number;
+  status: string;
+  highestMilestoneViews: number;
+}
+
+export async function updateViews(
+  submissionId: string,
+  newViews: number
+): Promise<{ success: boolean; data?: ViewUpdateResponse; error?: string; status: number }> {
+  if (!mongoose.Types.ObjectId.isValid(submissionId)) {
+    return { success: false, error: 'Invalid submission ID format', status: 400 };
+  }
+
+  const submission = await Submission.findById(submissionId);
+  if (!submission) {
+    return { success: false, error: 'Submission not found', status: 404 };
+  }
+
+  if (newViews < submission.views) {
+    return {
+      success: false,
+      error: `New view count (${newViews}) cannot be less than existing view count (${submission.views})`,
+      status: 400,
+    };
+  }
+
+  const campaign = await Campaign.findById(submission.campaignId);
+  if (!campaign) {
+    return { success: false, error: 'Associated campaign not found', status: 404 };
+  }
+
+  const previousViews = submission.views;
+
+  const result: IncrementalPayoutResult = calculateIncrementalPayout({
+    newViews,
+    currentViews: submission.views,
+    milestones: campaign.milestones,
+    previouslyCreditedPayout: submission.creditedPayout,
+    totalBudget: campaign.totalBudget,
+    currentBudgetSpent: campaign.budgetSpent,
+  });
+
+  if (result.status === 'CREDITED') {
+    campaign.budgetSpent = result.newBudgetSpent;
+    await campaign.save();
+
+    submission.views = newViews;
+    submission.creditedPayout = result.newCreditedPayout;
+    submission.lastMilestoneViews = result.highestMilestoneViews;
+
+    const maxMilestoneViews = Math.max(...campaign.milestones.map((m) => m.views));
+    submission.payoutStatus = result.highestMilestoneViews >= maxMilestoneViews ? 'COMPLETED' : 'PARTIAL';
+    await submission.save();
+  } else if (result.status === 'INSUFFICIENT_BUDGET') {
+    submission.views = newViews;
+    submission.payoutStatus = 'INSUFFICIENT_BUDGET';
+    await submission.save();
+  } else {
+    // NO_NEW_MILESTONE or ZERO_BELOW_FIRST_MILESTONE
+    submission.views = newViews;
+    await submission.save();
+  }
+
+  const updatedCampaignRemaining = Math.max(0, campaign.totalBudget - campaign.budgetSpent);
+
+  return {
+    success: true,
+    status: 200,
+    data: {
+      message: result.message,
+      submissionId: submission._id.toString(),
+      views: newViews,
+      previousViews,
+      earnedMilestonePayoutRupees: paiseToRupees(result.earnedMilestonePayout),
+      additionalPayoutCreditedRupees: paiseToRupees(result.additionalPayout),
+      totalCreditedPayoutRupees: paiseToRupees(submission.creditedPayout),
+      campaignBudgetSpentRupees: paiseToRupees(campaign.budgetSpent),
+      campaignRemainingBudgetRupees: paiseToRupees(updatedCampaignRemaining),
+      status: result.status,
+      highestMilestoneViews: result.highestMilestoneViews,
+    },
   };
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { createSubmissionSchema } from '../validators/submission.validator';
+import { updateViewsSchema } from '../validators/view-update.validator';
 import * as submissionService from '../services/submission.service';
 
 export async function create(req: Request, res: Response): Promise<void> {
@@ -64,5 +65,36 @@ export async function getEarnings(req: Request, res: Response): Promise<void> {
   } catch (error) {
     console.error('[submission.controller.getEarnings] Error:', error);
     res.status(500).json({ error: 'Internal server error while fetching creator earnings' });
+  }
+}
+
+/**
+ * PATCH /api/submissions/:id/views
+ * Simulates platform view updates from Instagram/YouTube crawlers.
+ * No role check required as specified in the assignment PDF.
+ */
+export async function updateViews(req: Request, res: Response): Promise<void> {
+  try {
+    const submissionId = req.params.id as string;
+
+    const parseResult = updateViewsSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      res.status(400).json({
+        error: 'Validation failed',
+        details: parseResult.error.flatten().fieldErrors,
+      });
+      return;
+    }
+
+    const result = await submissionService.updateViews(submissionId, parseResult.data.views);
+    if (!result.success) {
+      res.status(result.status).json({ error: result.error });
+      return;
+    }
+
+    res.status(200).json(result.data);
+  } catch (error) {
+    console.error('[submission.controller.updateViews] Error:', error);
+    res.status(500).json({ error: 'Internal server error while updating views' });
   }
 }
