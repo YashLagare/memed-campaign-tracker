@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { AuthProvider } from '@/lib/auth-context';
+import { Navbar } from '@/components/Navbar';
 
 export const metadata: Metadata = {
-  title: "Meme'd Campaign Payout Tracker",
-  description: 'Creator marketplace for tracking campaign performance, milestones, and automated payouts',
+  title: "Meme’d — Creator Campaign Payout Tracker",
+  description: 'Transparent milestone-based payouts for creators and strict budget protection for brands',
 };
 
 export default function RootLayout({
@@ -13,8 +15,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
-        {children}
+      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased flex flex-col font-sans">
+        <AuthProvider>
+          <Navbar />
+          <div className="flex-1">{children}</div>
+        </AuthProvider>
       </body>
     </html>
   );
