@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { ensureDatabaseConnected } from './middleware/db.middleware';
 import authRoutes from './routes/auth.routes';
+import campaignRoutes from './routes/campaign.routes';
 
 const app: Express = express();
 
@@ -23,6 +24,7 @@ app.use('/api', ensureDatabaseConnected);
 
 // Mount API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/campaigns', campaignRoutes);
 
 // Global 404 handler for API routes
 app.use('/api', (_req: Request, res: Response) => {
