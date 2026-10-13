@@ -3,6 +3,8 @@ import cors from 'cors';
 import { ensureDatabaseConnected } from './middleware/db.middleware';
 import authRoutes from './routes/auth.routes';
 import campaignRoutes from './routes/campaign.routes';
+import submissionRoutes from './routes/submission.routes';
+import creatorRoutes from './routes/creator.routes';
 
 const app: Express = express();
 
@@ -25,6 +27,8 @@ app.use('/api', ensureDatabaseConnected);
 // Mount API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);
+app.use('/api/submissions', submissionRoutes);
+app.use('/api/creators', creatorRoutes);
 
 // Global 404 handler for API routes
 app.use('/api', (_req: Request, res: Response) => {
