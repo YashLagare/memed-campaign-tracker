@@ -414,4 +414,5 @@ To deploy the entire application to Vercel under **one single URL**:
 ## 👨‍💻 Author
 
 - **Candidate:** Yash Lagare
+- **Portfolio:** [https://portfolio-five-opal-53.vercel.app/](https://portfolio-five-opal-53.vercel.app/)
 - **Repository:** [https://github.com/YashLagare/memed-campaign-tracker](https://github.com/YashLagare/memed-campaign-tracker)
