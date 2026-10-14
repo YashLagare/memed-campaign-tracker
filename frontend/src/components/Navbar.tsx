@@ -1,15 +1,14 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { LogOut, LayoutDashboard, Sparkles, UserCheck } from 'lucide-react';
+import { LogOut, Sparkles, UserCheck } from 'lucide-react';
+import Link from 'next/link';
 
 export function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 group">
@@ -26,7 +25,7 @@ export function Navbar() {
             </div>
           </Link>
 
-          {user && (
+          {/* {user && (
             <div className="hidden md:flex items-center gap-2">
               <Link
                 href={user.role === 'brand' ? '/brand' : '/creator'}
@@ -36,7 +35,7 @@ export function Navbar() {
                 Dashboard
               </Link>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="flex items-center gap-3">
@@ -49,11 +48,10 @@ export function Navbar() {
                 </span>
               </div>
               <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                  user.role === 'brand'
+                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${user.role === 'brand'
                     ? 'bg-purple-50 text-purple-700 border border-purple-200'
                     : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                }`}
+                  }`}
               >
                 <UserCheck className="w-3 h-3" />
                 {user.role === 'brand' ? 'Brand' : 'Creator'}

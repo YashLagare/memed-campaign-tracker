@@ -539,8 +539,8 @@ export default function CreatorDashboardPage() {
 
         {/* Modal: Submit Post Link */}
         {selectedCampaign && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-md w-full p-6 space-y-5">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-md w-full p-6 space-y-5 my-auto">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-slate-900">Submit Content Link</h2>

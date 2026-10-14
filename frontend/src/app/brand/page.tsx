@@ -371,8 +371,8 @@ export default function BrandDashboardPage() {
 
         {/* Modal: Create Campaign */}
         {showCreateModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-xl w-full p-6 sm:p-8 space-y-6 my-8">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-xl w-full p-6 sm:p-8 space-y-6 my-auto">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900">Launch Campaign</h2>
