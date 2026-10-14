@@ -1,22 +1,17 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import {
-  TrendingUp,
-  ShieldCheck,
-  Zap,
   ArrowRight,
-  Sparkles,
   Building2,
-  Flame,
   CheckCircle2,
+  Flame,
   Instagram,
+  Sparkles,
   Youtube,
-  Layers,
-  Coins,
+  Zap
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -183,16 +178,17 @@ export default function HomePage() {
       <footer className="border-t border-slate-200 bg-white py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
           <div>
-            © 2026 <span className="font-bold text-slate-700">Meme’d Campaign Payout Tracker</span> — SDE I Technical Assessment
+            © 2026 <span className="font-bold text-slate-700">Meme’d Campaign Payout Tracker</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>Next.js 15</span>
-            <span>•</span>
-            <span>Express</span>
-            <span>•</span>
-            <span>MongoDB Atlas</span>
-            <span>•</span>
-            <span>TypeScript</span>
+            <a
+              href="https://portfolio-five-opal-53.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-600 hover:text-indigo-600 font-medium transition inline-flex items-center gap-1 hover:underline"
+            >
+              Developed by <span className="font-semibold text-slate-800">Yash</span>
+            </a>
           </div>
         </div>
       </footer>
