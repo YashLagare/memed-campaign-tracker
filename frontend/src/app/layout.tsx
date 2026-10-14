@@ -6,6 +6,9 @@ import { Navbar } from '@/components/Navbar';
 export const metadata: Metadata = {
   title: "Meme’d — Creator Campaign Payout Tracker",
   description: 'Transparent milestone-based payouts for creators and strict budget protection for brands',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
