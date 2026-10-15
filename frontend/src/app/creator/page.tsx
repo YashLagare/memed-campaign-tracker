@@ -348,14 +348,6 @@ export default function CreatorDashboardPage() {
         {/* TAB 2: MY SUBMISSIONS & VIEW SIMULATOR */}
         {activeTab === 'submissions' && (
           <div className="space-y-6">
-            <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-2xl flex items-start gap-3 text-indigo-900 text-xs">
-              <PlayCircle className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold block text-sm">Interactive View Simulation Engine</span>
-                Use the simulation widgets below to simulate verified view increments from Instagram and YouTube crawlers. This directly calls the required <code>PATCH /api/submissions/:id/views</code> endpoint and demonstrates real-time milestone payouts and strict budget protection!
-              </div>
-            </div>
-
             {loading ? (
               <div className="min-h-[250px] flex items-center justify-center bg-white rounded-2xl border border-slate-200">
                 <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
